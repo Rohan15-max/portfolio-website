@@ -19,7 +19,7 @@
         color: white;
     }
 
-    /* NAVBAR */
+    /* NAV */
     nav {
         position: fixed;
         top: 0;
@@ -76,7 +76,6 @@
         text-decoration: none;
     }
 
-    /* SECTIONS */
     section {
         padding: 80px 20px;
         max-width: 1000px;
@@ -154,27 +153,10 @@
         font-size: 12px;
     }
 
-    /* FADE ANIMATION */
-    .hidden {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: 0.6s;
-    }
-
-    .show {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
     /* MOBILE */
     @media (max-width: 600px) {
         .hero h1 {
             font-size: 32px;
-        }
-
-        nav {
-            flex-direction: column;
-            align-items: center;
         }
     }
 </style>
@@ -202,16 +184,15 @@
 </div>
 
 <!-- ABOUT -->
-<section id="about" class="hidden">
+<section id="about">
     <h2>About Me</h2>
     <p class="about">
-        I am a beginner developer learning Python, HTML, CSS and building real-world projects.
-        My goal is to become a professional software developer and work on real applications.
+        I am a beginner developer learning Python, HTML, CSS and building real-world projects step by step to become a professional developer.
     </p>
 </section>
 
 <!-- SKILLS -->
-<section id="skills" class="hidden">
+<section id="skills">
     <h2>Skills</h2>
     <div class="skills">
         <div class="skill">Python</div>
@@ -222,37 +203,17 @@
     </div>
 </section>
 
-<!-- PROJECTS -->
-<section id="projects" class="hidden">
-    <h2>Projects</h2>
-    <div class="projects">
-
-        <div class="project">
-            <h3>Calculator</h3>
-            <p>Basic Python calculator application.</p>
-            <a href="#">View Code</a>
-        </div>
-
-        <div class="project">
-            <h3>Login System</h3>
-            <p>User authentication system using Python.</p>
-            <a href="#">View Code</a>
-        </div>
-
-        <div class="project">
-            <h3>Expense Tracker</h3>
-            <p>Track income and expenses easily.</p>
-            <a href="#">View Code</a>
-        </div>
-
-    </div>
+<!-- PROJECTS (AUTO GITHUB LOADING) -->
+<section id="projects">
+    <h2>My Projects</h2>
+    <div id="projects" class="projects"></div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact" class="hidden">
+<section id="contact">
     <h2>Contact</h2>
     <div class="contact">
-        <p>Email: yourmail@gmail.com</p>
+        <p>Email: <b>rohangaud2007@gmail.com</b></p>
         <p>
             GitHub: 
             <a href="https://github.com/Rohan15-max" target="_blank" style="color:#38bdf8;">
@@ -266,19 +227,31 @@
     © 2026 Rohan | Built with HTML, CSS & JavaScript
 </footer>
 
-<!-- JS ANIMATION -->
+<!-- JS: AUTO GITHUB PROJECT LOADER -->
 <script>
-    const elements = document.querySelectorAll(".hidden");
+const username = "Rohan15-max";
 
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("show");
-            }
-        });
+async function loadRepos() {
+    const res = await fetch(`https://api.github.com/users/${username}/repos`);
+    const data = await res.json();
+
+    const container = document.getElementById("projects");
+
+    data.forEach(repo => {
+        const div = document.createElement("div");
+        div.classList.add("project");
+
+        div.innerHTML = `
+            <h3>${repo.name}</h3>
+            <p>${repo.description ? repo.description : "No description available"}</p>
+            <a href="${repo.html_url}" target="_blank">View on GitHub</a>
+        `;
+
+        container.appendChild(div);
     });
+}
 
-    elements.forEach(el => observer.observe(el));
+loadRepos();
 </script>
 
 </body>
